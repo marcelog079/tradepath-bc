@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painter & Decorator — BuildBC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--bg:#111410;--bg2:#181c15;--bg3:#1e2419;--amber:#e8a020;--amber2:#f5bc45;--green:#4a7c59;--green2:#6aab7a;--text:#e8e4d8;--muted:#8a8878;--border:#2e3328;--radius:6px;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-weight:400;line-height:1.6;overflow-x:hidden;}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 2.5rem;background:rgba(17,20,16,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+    .nav-logo{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.5rem;letter-spacing:0.04em;color:var(--amber);text-decoration:none;}
+    .nav-logo span{color:var(--text);}
+    .nav-back{color:var(--muted);text-decoration:none;font-size:0.85rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;transition:color 0.2s;}
+    .nav-back:hover{color:var(--amber);}
+    .hero{padding:8rem 2.5rem 4rem;background:var(--bg2);border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
+    .hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;opacity:0.3;}
+    .hero-glow{position:absolute;width:500px;height:500px;background:radial-gradient(circle,rgba(232,160,32,0.1) 0%,transparent 70%);top:-100px;right:-100px;pointer-events:none;}
+    .hero-inner{max-width:1100px;margin:0 auto;position:relative;}
+    .breadcrumb{font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem;}
+    .breadcrumb a{color:var(--amber);text-decoration:none;}
+    .trade-icon-lg{font-size:4rem;margin-bottom:1rem;}
+    h1{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(3rem,8vw,6rem);line-height:0.95;text-transform:uppercase;letter-spacing:-0.01em;margin-bottom:1rem;}
+    h1 span{color:var(--amber);}
+    .hero-meta{display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:1.5rem;}
+    .meta-pill{display:inline-flex;align-items:center;gap:0.4rem;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.08em;padding:0.35rem 0.8rem;border-radius:100px;}
+    .meta-pill.amber{background:rgba(232,160,32,0.1);border-color:rgba(232,160,32,0.3);color:var(--amber);}
+    .meta-pill.green{background:rgba(106,171,122,0.1);border-color:rgba(106,171,122,0.3);color:var(--green2);}
+    .hero-desc{max-width:600px;color:var(--muted);font-size:1.05rem;line-height:1.7;}
+    section{padding:5rem 2.5rem;}
+    .section-inner{max-width:1100px;margin:0 auto;}
+    .section-label{font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--amber);margin-bottom:0.8rem;}
+    h2{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(1.8rem,4vw,2.8rem);text-transform:uppercase;line-height:1;margin-bottom:1.5rem;}
+    .timeline{display:flex;flex-direction:column;gap:0;}
+    .timeline-item{display:grid;grid-template-columns:120px 1fr;gap:2rem;padding:2rem 0;border-bottom:1px solid var(--border);align-items:start;}
+    .timeline-item:last-child{border-bottom:none;}
+    .timeline-year{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.8rem;color:var(--amber);line-height:1;}
+    .timeline-year span{display:block;font-size:0.7rem;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;margin-top:0.3rem;}
+    .timeline-content h3{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.1rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.4rem;}
+    .timeline-content p{font-size:0.88rem;color:var(--muted);line-height:1.6;}
+    .pay-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;}
+    .pay-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.8rem;text-align:center;transition:border-color 0.2s;}
+    .pay-card:hover{border-color:var(--amber);}
+    .pay-amount{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:2.2rem;color:var(--amber);line-height:1;}
+    .pay-label{font-size:0.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:0.4rem;font-family:'DM Mono',monospace;}
+    .pay-sub{font-size:0.8rem;color:var(--muted);margin-top:0.5rem;}
+    .schools-list{display:flex;flex-direction:column;gap:1rem;}
+    .school-item{display:flex;align-items:center;justify-content:space-between;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem 1.8rem;transition:border-color 0.2s;flex-wrap:wrap;gap:1rem;}
+    .school-item:hover{border-color:var(--green2);}
+    .school-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1rem;text-transform:uppercase;letter-spacing:0.04em;}
+    .school-location{font-size:0.75rem;color:var(--amber);font-family:'DM Mono',monospace;margin-top:0.2rem;}
+    .school-link{font-size:0.78rem;color:var(--amber);text-decoration:none;font-family:'DM Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;border:1px solid rgba(232,160,32,0.3);padding:0.3rem 0.8rem;border-radius:4px;transition:background 0.2s;white-space:nowrap;}
+    .school-link:hover{background:rgba(232,160,32,0.1);}
+    .companies-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem;}
+    .company-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;transition:border-color 0.2s,transform 0.2s;}
+    .company-card:hover{border-color:var(--amber);transform:translateY(-2px);}
+    .company-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1rem;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.3rem;}
+    .company-type{font-size:0.72rem;color:var(--amber);font-family:'DM Mono',monospace;}
+    .cta-band{background:var(--amber);padding:4rem 2.5rem;text-align:center;}
+    .cta-band h2{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(2rem,5vw,3.5rem);text-transform:uppercase;color:var(--bg);margin-bottom:1rem;}
+    .cta-band p{color:rgba(17,20,16,0.7);margin-bottom:2rem;max-width:500px;margin-left:auto;margin-right:auto;}
+    .btn-dark{background:var(--bg);color:var(--amber);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1rem;letter-spacing:0.08em;text-transform:uppercase;padding:0.9rem 2rem;border:none;border-radius:var(--radius);cursor:pointer;text-decoration:none;transition:background 0.2s;}
+    .btn-dark:hover{background:var(--bg2);}
+    footer{background:var(--bg);padding:2rem 2.5rem;border-top:1px solid var(--border);}
+    .footer-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+    .footer-logo{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.3rem;color:var(--amber);letter-spacing:0.04em;}
+    .footer-logo span{color:var(--muted);}
+    .footer-copy{font-size:0.78rem;color:var(--muted);font-family:'DM Mono',monospace;}
+    .reveal{opacity:0;transform:translateY(24px);transition:opacity 0.6s ease,transform 0.6s ease;}
+    .reveal.visible{opacity:1;transform:translateY(0);}
+    @media(max-width:768px){.timeline-item{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="nav-logo">BUILD<span>BC</span></a>
+  <a href="../index.html#trades" class="nav-back">← All Trades</a>
+</nav>
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="breadcrumb"><a href="../index.html">BuildBC</a> / Trades / Painter & Decorator</div>
+    <div class="trade-icon-lg">🎨</div>
+    <h1>Painter<span>& Decorator</span></h1>
+    <div class="hero-meta"><span class="meta-pill amber">Red Seal</span><span class="meta-pill amber">Stable Demand</span><span class="meta-pill ">3-Year Apprenticeship</span></div>
+    <p class="hero-desc">Painters and decorators finish BC's buildings inside and out — applying coatings, wallcoverings, and surface treatments. Steady work across residential, commercial, and industrial sectors.</p>
+  </div>
+</div>
+<section style="background:var(--bg);">
+  <div class="section-inner">
+    <div class="section-label reveal">— Certification Path</div>
+    <h2 class="reveal">Your Road To<br>Certification.</h2>
+    <div class="timeline reveal"><div class="timeline-item"><div class="timeline-year">Start<span>Day 1</span></div><div class="timeline-content"><h3>Find a Sponsor Employer</h3><p>Painting contractors of all sizes hire apprentices. Entry is accessible — attitude and reliability matter more than prior experience.</p></div></div><div class="timeline-item"><div class="timeline-year">Yr 1<span>~1500 hrs</span></div><div class="timeline-content"><h3>1st Year Apprentice</h3><p>Surface preparation, brush and roller techniques, colour theory, and safety.</p></div></div><div class="timeline-item"><div class="timeline-year">Yr 2<span>~3000 hrs</span></div><div class="timeline-content"><h3>2nd Year</h3><p>Spray application, specialty coatings, wallcoverings, and estimating basics.</p></div></div><div class="timeline-item"><div class="timeline-year">Yr 3<span>~4500 hrs</span></div><div class="timeline-content"><h3>Certificate of Qualification</h3><p>Final technical training and CofQ exam. Journeyperson Painter and Decorator.</p></div></div><div class="timeline-item"><div class="timeline-year">Red<span>Seal</span></div><div class="timeline-content"><h3>Interprovincial Red Seal</h3><p>National recognition. Industrial and marine painters with Red Seal command significant premiums.</p></div></div></div>
+  </div>
+</section>
+<section style="background:var(--bg2);">
+  <div class="section-inner">
+    <div class="section-label reveal">— Earning Potential in BC</div>
+    <h2 class="reveal">What You'll Make.</h2>
+    <div class="pay-grid reveal"><div class="pay-card"><div class="pay-amount">$18–22</div><div class="pay-label">1st Year</div><div class="pay-sub">Hourly</div></div><div class="pay-card"><div class="pay-amount">$24–30</div><div class="pay-label">2nd Year</div><div class="pay-sub">Hourly</div></div><div class="pay-card"><div class="pay-amount">$32–45</div><div class="pay-label">Journeyperson</div><div class="pay-sub">Hourly · sector dependent</div></div><div class="pay-card"><div class="pay-amount">$70K+</div><div class="pay-label">Annual Salary</div><div class="pay-sub">BC average</div></div><div class="pay-card"><div class="pay-amount">$100K+</div><div class="pay-label">Industrial/Marine</div><div class="pay-sub">Specialty coatings premium</div></div></div>
+  </div>
+</section>
+<section style="background:var(--bg);">
+  <div class="section-inner">
+    <div class="section-label reveal">— Specialty Paths</div>
+    <h2 class="reveal">WHERE THIS TRADE<br>CAN TAKE YOU.</h2>
+    <div class="companies-grid reveal">
+      <div class="company-card" style="cursor:pointer;" onclick="openModal('Industrial Coatings Specialist','Apply protective coatings to bridges, tanks, pipelines and industrial structures.','NACE/AMPP coating inspector certification, 6 months','AMPP (Association for Materials Protection and Performance)','+$15–25/hr over residential painting rate')">
+        <div class="company-name">Industrial Coatings Specialist</div>
+        <div class="company-type">Apply protective coatings to bridges, tanks, pipelines and i...</div>
+        <div class="company-hiring" style="color:var(--amber);">Top Earning</div>
+      </div>
+      <div class="company-card" style="cursor:pointer;" onclick="openModal('Marine Painter','Apply specialized coatings to ships and marine infrastructure at BC shipyards.','Within painting apprenticeship + marine experience','Seaspan Shipyards, on the job training','+$10–18/hr over base painter rate')">
+        <div class="company-name">Marine Painter</div>
+        <div class="company-type">Apply specialized coatings to ships and marine infrastructur...</div>
+        <div class="company-hiring" style="color:var(--amber);">Specialized</div>
+      </div>
+    </div>
+  </div>
+</section>
+<section style="background:var(--bg);">
+  <div class="section-inner">
+    <div class="section-label reveal">— Where To Train</div>
+    <h2 class="reveal">Schools Offering<br>This Program.</h2>
+    <div class="schools-list reveal"><div class="school-item"><div><div class="school-name">BCIT — BC Institute of Technology</div><div class="school-location">📍 Burnaby, BC</div></div><a href="https://www.bcit.ca" target="_blank" class="school-link">Visit →</a></div><div class="school-item"><div><div class="school-name">IUPAT District Council 38</div><div class="school-location">📍 Vancouver, BC</div></div><a href="https://www.dc38.ca" target="_blank" class="school-link">Visit →</a></div><div class="school-item"><div><div class="school-name">Skilled Trades BC</div><div class="school-location">📍 Province-wide</div></div><a href="https://www.skilledtradesbc.ca" target="_blank" class="school-link">Visit →</a></div></div>
+  </div>
+</section>
+<section style="background:var(--bg2);">
+  <div class="section-inner">
+    <div class="section-label reveal">— Companies Hiring</div>
+    <h2 class="reveal">Who's Looking<br>For You.</h2>
+    <div class="companies-grid reveal"><div class="company-card"><div class="company-name">Pacific Painting</div><div class="company-type">Commercial — Metro Vancouver</div></div><div class="company-card"><div class="company-name">IUPAT DC 38</div><div class="company-type">Union — Painters & Allied Trades</div></div><div class="company-card"><div class="company-name">Seaspan Shipyards</div><div class="company-type">Marine Coatings — North Vancouver</div></div><div class="company-card"><div class="company-name">Ledcor Construction</div><div class="company-type">Major GC — Painting Scope</div></div></div>
+  </div>
+</section>
+
+
+<div class="cta-band">
+  <h2>Ready To Start?</h2>
+  <p>Register as an apprentice with Skilled Trades BC and take the first step toward your certification.</p>
+  <a href="https://www.skilledtradesbc.ca" target="_blank" class="btn-dark">Register With Skilled Trades BC →</a>
+</div>
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">BUILD<span>BC</span></div>
+    <div class="footer-copy">© 2025 BuildBC · Trades Career Hub · Metro Vancouver, BC</div>
+  </div>
+</footer>
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+
+<div id="specialty-modal" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.75);align-items:center;justify-content:center;padding:1.5rem;">
+  <div style="background:#181c15;border:1px solid #2e3328;border-radius:6px;padding:2.5rem;max-width:500px;width:100%;position:relative;animation:fadeIn 0.2s ease;">
+    <button onclick="closeModal()" style="position:absolute;top:1rem;right:1.5rem;background:none;border:none;color:#8a8878;font-size:1.5rem;cursor:pointer;font-family:'Barlow Condensed',sans-serif;line-height:1;" onmouseover="this.style.color='#e8a020'" onmouseout="this.style.color='#8a8878'">×</button>
+    <div style="font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:#e8a020;margin-bottom:0.8rem;">— SPECIALTY PATH</div>
+    <h2 id="modal-title" style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:2rem;text-transform:uppercase;margin-bottom:1rem;color:#e8e4d8;"></h2>
+    <p id="modal-desc" style="color:#8a8878;font-size:0.92rem;line-height:1.7;margin-bottom:1.5rem;"></p>
+    <div style="display:flex;flex-direction:column;gap:0.8rem;">
+      <div style="background:#111410;border:1px solid #2e3328;border-radius:6px;padding:1rem;">
+        <div style="font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:#e8a020;margin-bottom:0.3rem;">Duration</div>
+        <div id="modal-duration" style="font-size:0.88rem;color:#e8e4d8;"></div>
+      </div>
+      <div style="background:#111410;border:1px solid #2e3328;border-radius:6px;padding:1rem;">
+        <div style="font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:#e8a020;margin-bottom:0.3rem;">Where To Train</div>
+        <div id="modal-where" style="font-size:0.88rem;color:#e8e4d8;"></div>
+      </div>
+      <div style="background:#111410;border:1px solid #2e3328;border-radius:6px;padding:1rem;">
+        <div style="font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:#e8a020;margin-bottom:0.3rem;">Pay Premium</div>
+        <div id="modal-pay" style="font-size:0.88rem;color:#6aab7a;font-weight:600;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<style>@keyframes fadeIn{from{opacity:0;transform:scale(0.97)}to{opacity:1;transform:scale(1)}}</style>
+<script>
+function openModal(title, description, duration, where, payPremium) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-desc').textContent = description;
+  document.getElementById('modal-duration').textContent = duration;
+  document.getElementById('modal-where').textContent = where;
+  document.getElementById('modal-pay').textContent = payPremium;
+  document.getElementById('specialty-modal').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('specialty-modal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+document.getElementById('specialty-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+</script>
+
+</body>
+</html>
