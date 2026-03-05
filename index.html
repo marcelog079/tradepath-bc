@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Build BC — Trades Career Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #111410;
+      --bg2:       #181c15;
+      --bg3:       #1e2419;
+      --amber:     #e8a020;
+      --amber2:    #f5bc45;
+      --green:     #4a7c59;
+      --green2:    #6aab7a;
+      --text:      #e8e4d8;
+      --muted:     #8a8878;
+      --border:    #2e3328;
+      --radius:    6px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+      font-weight: 400;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2.5rem;
+      background: rgba(17,20,16,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 1.5rem;
+      letter-spacing: 0.04em;
+      color: var(--amber);
+      text-decoration: none;
+    }
+
+    .nav-logo span { color: var(--text); }
+
+    nav ul {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--amber); }
+
+    .nav-cta {
+      background: var(--amber);
+      color: var(--bg) !important;
+      padding: 0.5rem 1.2rem;
+      border-radius: var(--radius);
+      font-weight: 600 !important;
+    }
+
+    .nav-cta:hover { background: var(--amber2); color: var(--bg) !important; }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 6rem 2.5rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.4;
+    }
+
+    .hero-glow {
+      position: absolute;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(232,160,32,0.12) 0%, transparent 70%);
+      top: 10%; left: -100px;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(232,160,32,0.12);
+      border: 1px solid rgba(232,160,32,0.3);
+      color: var(--amber);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      padding: 0.4rem 0.9rem;
+      border-radius: 100px;
+      margin-bottom: 2rem;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .hero-tag::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--amber);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(3.5rem, 9vw, 8rem);
+      line-height: 0.95;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+
+    h1 .line-amber { color: var(--amber); display: block; }
+    h1 .line-outline {
+      -webkit-text-stroke: 2px var(--text);
+      color: transparent;
+      display: block;
+    }
+
+    .hero-sub {
+      max-width: 560px;
+      font-size: 1.15rem;
+      color: var(--muted);
+      margin-top: 2rem;
+      line-height: 1.7;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+
+    .hero-sub strong { color: var(--text); }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2.5rem;
+      flex-wrap: wrap;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+
+    .btn-primary {
+      background: var(--amber);
+      color: var(--bg);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.9rem 2rem;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .btn-primary:hover { background: var(--amber2); transform: translateY(-1px); }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.9rem 2rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-secondary:hover { border-color: var(--amber); color: var(--amber); }
+
+    .hero-stats {
+      display: flex;
+      gap: 3rem;
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      animation: fadeUp 0.6s 0.4s ease both;
+      flex-wrap: wrap;
+    }
+
+    .stat-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 2.5rem;
+      color: var(--amber);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 0.3rem;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* SECTIONS */
+    section { padding: 6rem 2.5rem; }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      text-transform: uppercase;
+      line-height: 1;
+      letter-spacing: 0.01em;
+      margin-bottom: 1rem;
+    }
+
+    .section-desc {
+      color: var(--muted);
+      max-width: 560px;
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 3rem;
+    }
+
+    /* OPPORTUNITY BAND */
+    .opportunity-band {
+      background: var(--amber);
+      padding: 1.5rem 2.5rem;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .marquee-track {
+      display: inline-flex;
+      gap: 3rem;
+      animation: marquee 25s linear infinite;
+    }
+
+    .marquee-item {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--bg);
+    }
+
+    .marquee-dot { color: rgba(17,20,16,0.4); }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* TRADES GRID */
+    .trades-section { background: var(--bg2); }
+
+    .trades-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .trade-card {
+      background: var(--bg2);
+      padding: 1.8rem;
+      transition: background 0.2s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .trade-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--amber);
+      transform: scaleY(0);
+      transition: transform 0.2s;
+      transform-origin: bottom;
+    }
+
+    .trade-card:hover { background: var(--bg3); }
+    .trade-card:hover::before { transform: scaleY(1); }
+
+    .trade-icon {
+      font-size: 1.8rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .trade-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.4rem;
+    }
+
+    .trade-meta {
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+    }
+
+    .trade-badge {
+      display: inline-block;
+      margin-top: 0.8rem;
+      background: rgba(74,124,89,0.2);
+      border: 1px solid rgba(106,171,122,0.3);
+      color: var(--green2);
+      font-size: 0.7rem;
+      font-family: 'DM Mono', monospace;
+      letter-spacing: 0.08em;
+      padding: 0.2rem 0.6rem;
+      border-radius: 100px;
+    }
+
+    .trade-badge.red {
+      background: rgba(232,160,32,0.1);
+      border-color: rgba(232,160,32,0.3);
+      color: var(--amber);
+    }
+
+    /* WHY SECTION */
+    .why-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .why-points { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    .why-point {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      padding: 1.5rem;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: border-color 0.2s;
+    }
+
+    .why-point:hover { border-color: var(--amber); }
+
+    .why-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 2rem;
+      color: var(--amber);
+      line-height: 1;
+      min-width: 2.5rem;
+    }
+
+    .why-text h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.4rem;
+    }
+
+    .why-text p { font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
+
+    .quote-block {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--amber);
+      padding: 3rem;
+      border-radius: var(--radius);
+    }
+
+    .quote-text {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+    }
+
+    .quote-attr {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* SCHOOLS */
+    .schools-section { background: var(--bg); }
+
+    .schools-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .school-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .school-card:hover { border-color: var(--green2); transform: translateY(-2px); }
+
+    .school-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.5rem;
+    }
+
+    .school-location {
+      font-size: 0.78rem;
+      color: var(--amber);
+      font-family: 'DM Mono', monospace;
+      margin-bottom: 1rem;
+    }
+
+    .school-programs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .program-tag {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.72rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      font-family: 'DM Mono', monospace;
+    }
+
+    /* TESTIMONIALS */
+    .testimonials-section { background: var(--bg2); }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .testimonial-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      position: relative;
+    }
+
+    .testimonial-card::before {
+      content: '"';
+      position: absolute;
+      top: 1rem; right: 1.5rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 5rem;
+      color: var(--border);
+      line-height: 1;
+    }
+
+    .testimonial-text {
+      font-size: 0.95rem;
+      color: var(--text);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .author-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--amber);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: var(--bg);
+      flex-shrink: 0;
+    }
+
+    .author-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .author-trade {
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+    }
+
+    /* COMPANIES */
+    .companies-section { background: var(--bg); }
+
+    .companies-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .company-card {
+      background: var(--bg);
+      padding: 1.5rem;
+      transition: background 0.2s;
+    }
+
+    .company-card:hover { background: var(--bg3); }
+
+    .company-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.3rem;
+    }
+
+    .company-type {
+      font-size: 0.72rem;
+      color: var(--amber);
+      font-family: 'DM Mono', monospace;
+      margin-bottom: 0.6rem;
+    }
+
+    .company-hiring {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.7rem;
+      color: var(--green2);
+      font-family: 'DM Mono', monospace;
+    }
+
+    .company-hiring::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--green2);
+    }
+
+    /* JOIN CTA */
+    .join-section {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .join-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .join-text h2 { margin-bottom: 1rem; }
+
+    .join-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .join-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      transition: border-color 0.2s;
+    }
+
+    .join-card:hover { border-color: var(--amber); }
+
+    .join-card-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 1.3rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .join-card-title span { color: var(--amber); }
+
+    .join-card p { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.2rem; }
+
+    .join-features {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .join-feature {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.82rem;
+      color: var(--text);
+    }
+
+    .join-feature::before {
+      content: '✓';
+      color: var(--green2);
+      font-weight: 700;
+      font-size: 0.8rem;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--bg);
+      padding: 3rem 2.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 1.3rem;
+      color: var(--amber);
+      letter-spacing: 0.04em;
+    }
+
+    .footer-logo span { color: var(--muted); }
+
+    .footer-copy {
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav ul { display: none; }
+      .why-grid { grid-template-columns: 1fr; }
+      .join-inner { grid-template-columns: 1fr; }
+      .hero { padding-top: 5rem; }
+    }
+
+    /* SCROLL REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">BUILD<span>BC</span></a>
+    <ul>
+      <li><a href="#trades">Trades</a></li>
+      <li><a href="#why">Why Trades</a></li>
+      <li><a href="#schools">Schools</a></li>
+      <li><a href="#companies">Companies</a></li>
+      <li><a href="#community">Stories</a></li>
+      <li><a href="#join" class="nav-cta">Get Started</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-content">
+      <div class="hero-tag">British Columbia Trades Career Hub</div>
+      <h1>
+        <span class="line-amber">Build</span>
+        <span>Something</span>
+        <span class="line-outline">Real.</span>
+      </h1>
+      <p class="hero-sub">
+        BC needs <strong>tens of thousands of skilled tradespeople</strong> over the next decade.
+        The jobs are here. The pay is real. The future is yours to build.
+      </p>
+      <div class="hero-actions">
+        <a href="#trades" class="btn-primary">Explore Trades</a>
+        <a href="#why" class="btn-secondary">Why Trades?</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num">77K+</div>
+          <div class="stat-label">Trade jobs needed in BC by 2030</div>
+        </div>
+        <div>
+          <div class="stat-num">$40–$120</div>
+          <div class="stat-label">Hourly rate range for journeypersons</div>
+        </div>
+        <div>
+          <div class="stat-num">0 debt</div>
+          <div class="stat-label">Earn while you learn as an apprentice</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="opportunity-band">
+    <div class="marquee-track">
+      <span class="marquee-item">Electrician</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">Plumber</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">Gasfitter</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">Welder</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">HVAC Technician</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">Carpenter</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">Locksmith</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">Ironworker</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">Millwright</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">Sheet Metal Worker</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">Steamfitter</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">Elevator Mechanic</span><span class="marquee-dot">◆</span>
+      <!-- duplicate for seamless loop -->
+      <span class="marquee-item">Electrician</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">Plumber</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">Gasfitter</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">Welder</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">HVAC Technician</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">Carpenter</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">Locksmith</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">Ironworker</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">Millwright</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">Sheet Metal Worker</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">Steamfitter</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">Elevator Mechanic</span><span class="marquee-dot">◆</span>
+    </div>
+  </div>
+
+  <!-- TRADES -->
+  <section class="trades-section" id="trades">
+    <div class="section-inner">
+      <div class="section-label reveal">— Certifiable Trades in BC</div>
+      <h2 class="reveal">Your Trade.<br>Your Future.</h2>
+      <p class="section-desc reveal">All trades listed are certifiable through the Industry Training Authority (ITA BC) and Skilled Trades BC. Click any trade to learn more about the path.</p>
+      <div class="trades-grid reveal">
+
+        <a href="trades/electrician.html" class="trade-card" style="text-decoration:none;color:inherit;">
+          <div class="trade-icon">⚡</div>
+          <div class="trade-name">Electrician</div>
+          <div class="trade-meta">4-year apprenticeship · Red Seal</div>
+          <div class="trade-badge">High Demand</div>
+        </a>
+
+        <a href="trades/plumber.html" class="trade-card" style="text-decoration:none;color:inherit;">
+          <div class="trade-icon">🔧</div>
+          <div class="trade-name">Plumber</div>
+          <div class="trade-meta">4-year apprenticeship · Red Seal</div>
+          <div class="trade-badge">High Demand</div>
+        </a>
+
+        <a href="trades/gasfitter.html" class="trade-card" style="text-decoration:none;color:inherit;">
+          <div class="trade-icon">🔥</div>
+          <div class="trade-name">Gasfitter</div>
+          <div class="trade-meta">2-year apprenticeship · Class A/B</div>
+          <div class="trade-badge red">Growing Fast</div>
+        </a>
+
+        <a href="trades/hvac.html" class="trade-card" style="text-decoration:none;color:inherit;">
+          <div class="trade-icon">❄️</div>
+          <div class="trade-name">HVAC Technician</div>
+          <div class="trade-meta">4-year apprenticeship · Red Seal</div>
+          <div class="trade-badge">High Demand</div>
+        </a>
+
+        <a href="trades/welder.html" class="trade-card" style="text-decoration:none;color:inherit;">
+          <div class="trade-icon">🔩</div>
+          <div class="trade-name">Welder</div>
+          <div class="trade-meta">3-year apprenticeship · Red Seal</div>
+          <div class="trade-badge red">Growing Fast</div>
+        </a>
+
+        <a href="trades/carpenter.html" class="trade-card" style="text-decoration:none;color:inherit;">
+          <div class="trade-icon">🪚</div>
+          <div class="trade-name">Carpenter</div>
+          <div class="trade-meta">4-year apprenticeship · Red Seal</div>
+          <div class="trade-badge">High Demand</div>
+        </a>
+
+        <a href="trades/locksmith.html" class="trade-card" style="text-decoration:none;color:inherit;">
+          <div class="trade-icon">🔐</div>
+          <div class="trade-name">Locksmith</div>
+          <div class="trade-meta">2-year apprenticeship · ITA Certified</div>
+          <div class="trade-badge red">Access Control Boom</div>
+        </a>
+
+        <a href="trades/ironworker.html" class="trade-card" style="text-decoration:none;color:inherit;">
+          <div class="trade-icon">🏗️</div>
+          <div class="trade-name">Ironworker</div>
+          <div class="trade-meta">4-year apprenticeship · Red Seal</div>
+          <div class="trade-badge">High Demand</div>
+        </a>
+
+        <a href="trades/millwright.html" class="trade-card" style="text-decoration:none;color:inherit;">
+          <div class="trade-icon">⚙️</div>
+          <div class="trade-name">Millwright</div>
+          <div class="trade-meta">4-year apprenticeship · Red Seal</div>
+          <div class="trade-badge">High Demand</div>
+        </a>
+
+        <a href="trades/sheet-metal.html" class="trade-card" style="text-decoration:none;color:inherit;">
+          <div class="trade-icon">🌬️</div>
+          <div class="trade-name">Sheet Metal Worker</div>
+          <div class="trade-meta">4-year apprenticeship · Red Seal</div>
+          <div class="trade-badge red">Growing Fast</div>
+        </a>
+
+        <a href="trades/steamfitter.html" class="trade-card" style="text-decoration:none;color:inherit;">
+          <div class="trade-icon">💧</div>
+          <div class="trade-name">Steamfitter / Pipefitter</div>
+          <div class="trade-meta">5-year apprenticeship · Red Seal</div>
+          <div class="trade-badge">High Demand</div>
+        </a>
+
+        <a href="trades/elevator-mechanic.html" class="trade-card" style="text-decoration:none;color:inherit;">
+          <div class="trade-icon">🛗</div>
+          <div class="trade-name">Elevator Mechanic</div>
+          <div class="trade-meta">4-year apprenticeship · Red Seal</div>
+          <div class="trade-badge red">Top Earning Trade</div>
+        </a>
+
+        <a href="trades/automotive.html" class="trade-card" style="text-decoration:none;color:inherit;">
+          <div class="trade-icon">🚗</div>
+          <div class="trade-name">Automotive Service Tech</div>
+          <div class="trade-meta">4-year apprenticeship · Red Seal</div>
+          <div class="trade-badge">Stable</div>
+        </a>
+
+        <a href="trades/bricklayer.html" class="trade-card" style="text-decoration:none;color:inherit;">
+          <div class="trade-icon">🧱</div>
+          <div class="trade-name">Bricklayer / Masonry</div>
+          <div class="trade-meta">4-year apprenticeship · Red Seal</div>
+          <div class="trade-badge red">Growing Fast</div>
+        </a>
+
+        <a href="trades/painter.html" class="trade-card" style="text-decoration:none;color:inherit;">
+          <div class="trade-icon">🎨</div>
+          <div class="trade-name">Painter & Decorator</div>
+          <div class="trade-meta">3-year apprenticeship · Red Seal</div>
+          <div class="trade-badge">Stable</div>
+        </a>
+
+        <a href="trades/glazier.html" class="trade-card" style="text-decoration:none;color:inherit;">
+          <div class="trade-icon">🪟</div>
+          <div class="trade-name">Glazier</div>
+          <div class="trade-meta">4-year apprenticeship · Red Seal</div>
+          <div class="trade-badge red">Growing Fast</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section id="why" style="background: var(--bg);">
+    <div class="section-inner">
+      <div class="why-grid">
+        <div>
+          <div class="section-label reveal">— Why Choose Trades</div>
+          <h2 class="reveal">Securing The<br>Future Of BC.</h2>
+          <p class="section-desc reveal">BC is facing a skilled trades shortage unlike anything we've seen. That's not a warning — it's an invitation. The table is set. The question is whether you'll sit down.</p>
+          <div class="why-points reveal">
+            <div class="why-point">
+              <div class="why-num">01</div>
+              <div class="why-text">
+                <h3>Earn While You Learn</h3>
+                <p>Apprentices earn a real wage from day one. No tuition debt. No four years waiting to enter the workforce.</p>
+              </div>
+            </div>
+            <div class="why-point">
+              <div class="why-num">02</div>
+              <div class="why-text">
+                <h3>Nobody Can Outsource Your Hands</h3>
+                <p>AI can't wire a panel, fix a burst pipe, or cut a key. Skilled trades are recession-resistant and automation-proof.</p>
+              </div>
+            </div>
+            <div class="why-point">
+              <div class="why-num">03</div>
+              <div class="why-text">
+                <h3>Own Your Business In 5 Years</h3>
+                <p>A Red Seal certificate is the foundation of a business. Most successful trade contractors started exactly where you are.</p>
+              </div>
+            </div>
+            <div class="why-point">
+              <div class="why-num">04</div>
+              <div class="why-text">
+                <h3>Respected Craft. Real Pride.</h3>
+                <p>You build things that last. You solve real problems. People remember the person who fixed what was broken.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="reveal">
+          <div class="quote-block">
+            <div class="quote-text">"There's enough for everyone to fill their stomachs — if they're willing to show up and learn the craft."</div>
+            <div class="quote-attr">— The BuildBC Philosophy</div>
+          </div>
+          <div style="margin-top: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div style="background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; text-align: center;">
+              <div style="font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 2rem; color: var(--amber);">$90K+</div>
+              <div style="font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.3rem;">Avg Journeyperson Salary BC</div>
+            </div>
+            <div style="background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; text-align: center;">
+              <div style="font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 2rem; color: var(--green2);">5 Yrs</div>
+              <div style="font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.3rem;">Average path to full certification</div>
+            </div>
+            <div style="background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; text-align: center;">
+              <div style="font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 2rem; color: var(--amber);">55K</div>
+              <div style="font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.3rem;">Trade workers retiring by 2030</div>
+            </div>
+            <div style="background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; text-align: center;">
+              <div style="font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 2rem; color: var(--green2);">Red Seal</div>
+              <div style="font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.3rem;">Works in every province</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHOOLS -->
+  <section class="schools-section" id="schools">
+    <div class="section-inner">
+      <div class="section-label reveal">— Where To Train in BC</div>
+      <h2 class="reveal">Find Your<br>Program.</h2>
+      <p class="section-desc reveal">These institutions offer apprenticeship technical training and certification programs recognized by Skilled Trades BC and the ITA.</p>
+      <div class="schools-list reveal">
+
+        <div class="school-card">
+          <div class="school-name">BCIT — BC Institute of Technology</div>
+          <div class="school-location">📍 Burnaby, BC</div>
+          <div class="school-programs">
+            <span class="program-tag">Electrician</span>
+            <span class="program-tag">Plumbing</span>
+            <span class="program-tag">HVAC</span>
+            <span class="program-tag">Welding</span>
+            <span class="program-tag">Sheet Metal</span>
+            <span class="program-tag">Pipefitting</span>
+          </div>
+        </div>
+
+        <div class="school-card">
+          <div class="school-name">Vancouver Community College</div>
+          <div class="school-location">📍 Vancouver, BC</div>
+          <div class="school-programs">
+            <span class="program-tag">Carpentry</span>
+            <span class="program-tag">Electrician</span>
+            <span class="program-tag">Plumbing</span>
+            <span class="program-tag">Welding</span>
+            <span class="program-tag">Automotive</span>
+          </div>
+        </div>
+
+        <div class="school-card">
+          <div class="school-name">Camosun College</div>
+          <div class="school-location">📍 Victoria, BC</div>
+          <div class="school-programs">
+            <span class="program-tag">Electrician</span>
+            <span class="program-tag">Carpentry</span>
+            <span class="program-tag">Plumbing</span>
+            <span class="program-tag">HVAC</span>
+            <span class="program-tag">Welding</span>
+          </div>
+        </div>
+
+        <div class="school-card">
+          <div class="school-name">Kwantlen Polytechnic University</div>
+          <div class="school-location">📍 Surrey & Langley, BC</div>
+          <div class="school-programs">
+            <span class="program-tag">Carpentry</span>
+            <span class="program-tag">Electrical</span>
+            <span class="program-tag">Plumbing</span>
+          </div>
+        </div>
+
+        <div class="school-card">
+          <div class="school-name">College of New Caledonia</div>
+          <div class="school-location">📍 Prince George, BC</div>
+          <div class="school-programs">
+            <span class="program-tag">Heavy Equipment</span>
+            <span class="program-tag">Welding</span>
+            <span class="program-tag">Electrician</span>
+            <span class="program-tag">Plumbing</span>
+          </div>
+        </div>
+
+        <div class="school-card">
+          <div class="school-name">North Island College</div>
+          <div class="school-location">📍 Campbell River & Courtenay, BC</div>
+          <div class="school-programs">
+            <span class="program-tag">Carpentry</span>
+            <span class="program-tag">Electrician</span>
+            <span class="program-tag">Plumbing</span>
+            <span class="program-tag">Welding</span>
+          </div>
+        </div>
+
+        <div class="school-card">
+          <div class="school-name">Skilled Trades BC (ITA)</div>
+          <div class="school-location">📍 Province-wide</div>
+          <div class="school-programs">
+            <span class="program-tag">Apprenticeship Registry</span>
+            <span class="program-tag">Challenge Exams</span>
+            <span class="program-tag">Red Seal</span>
+            <span class="program-tag">All Trades</span>
+          </div>
+        </div>
+
+        <div class="school-card">
+          <div class="school-name">Thompson Rivers University</div>
+          <div class="school-location">📍 Kamloops, BC</div>
+          <div class="school-programs">
+            <span class="program-tag">Carpentry</span>
+            <span class="program-tag">Electrician</span>
+            <span class="program-tag">Welding</span>
+            <span class="program-tag">Plumbing</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials-section" id="community">
+    <div class="section-inner">
+      <div class="section-label reveal">— Real Stories</div>
+      <h2 class="reveal">From The Field.</h2>
+      <p class="section-desc reveal">People who took the path. In their own words.</p>
+      <div class="testimonials-grid reveal">
+
+        <div class="testimonial-card">
+          <p class="testimonial-text">"I was stacking shelves at 19 with no plan. My cousin got me a job sweeping a shop. Four years later I'm a Red Seal electrician making more than most people I went to school with."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">MR</div>
+            <div>
+              <div class="author-name">Marcus R.</div>
+              <div class="author-trade">Journeyperson Electrician · Vancouver</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <p class="testimonial-text">"People told me trades were for people who couldn't do anything else. I own two vans now and I'm 28. My friends with degrees are still figuring it out."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">JT</div>
+            <div>
+              <div class="author-name">Jordan T.</div>
+              <div class="author-trade">Plumbing Contractor · North Vancouver</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <p class="testimonial-text">"I came to Canada speaking broken English. Trades gave me a path that didn't care about my accent. It cared about my work. That meant everything."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">AI</div>
+            <div>
+              <div class="author-name">Andrei I.</div>
+              <div class="author-trade">Welder · Burnaby</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <p class="testimonial-text">"Locksmith was not on my radar until a friend showed me what access control actually looked like. It's tech. It's problem solving. It's physical. I was hooked."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">SK</div>
+            <div>
+              <div class="author-name">Sara K.</div>
+              <div class="author-trade">Locksmith · West Vancouver</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <p class="testimonial-text">"The money is real. $45/hr as a second-year apprentice. My friends finishing degrees are applying for $22/hr jobs. I have no debt. They have $60,000 of it."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">NB</div>
+            <div>
+              <div class="author-name">Nathan B.</div>
+              <div class="author-trade">2nd Year HVAC Apprentice · Richmond</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <p class="testimonial-text">"My dad was a carpenter. I resisted it for years trying to be different. Eventually I tried it and realized — this is legacy. I'm proud to carry it forward."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">DM</div>
+            <div>
+              <div class="author-name">Diego M.</div>
+              <div class="author-trade">Red Seal Carpenter · Coquitlam</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPANIES -->
+  <section class="companies-section" id="companies">
+    <div class="section-inner">
+      <div class="section-label reveal">— Companies Hiring in the Region</div>
+      <h2 class="reveal">Who's Hiring.</h2>
+      <p class="section-desc reveal">Metro Vancouver trade companies actively hiring apprentices and journeypersons. More added regularly.</p>
+      <div class="companies-grid reveal">
+
+        <div class="company-card">
+          <div class="company-name">Houle Electric</div>
+          <div class="company-type">Electrical Contractor</div>
+          <div class="company-hiring">Actively Hiring</div>
+        </div>
+
+        <div class="company-card">
+          <div class="company-name">Mott Electric</div>
+          <div class="company-type">Electrical Contractor</div>
+          <div class="company-hiring">Actively Hiring</div>
+        </div>
+
+        <div class="company-card">
+          <div class="company-name">Commonwealth Plumbing</div>
+          <div class="company-type">Plumbing & Gas</div>
+          <div class="company-hiring">Actively Hiring</div>
+        </div>
+
+        <div class="company-card">
+          <div class="company-name">United Locksmith</div>
+          <div class="company-type">Locksmith & Access Control</div>
+          <div class="company-hiring">Actively Hiring</div>
+        </div>
+
+        <div class="company-card">
+          <div class="company-name">Pacific Ventilation</div>
+          <div class="company-type">HVAC Contractor</div>
+          <div class="company-hiring">Actively Hiring</div>
+        </div>
+
+        <div class="company-card">
+          <div class="company-name">Ledcor Construction</div>
+          <div class="company-type">General Contractor</div>
+          <div class="company-hiring">Actively Hiring</div>
+        </div>
+
+        <div class="company-card">
+          <div class="company-name">Ventana Construction</div>
+          <div class="company-type">Glazing & Windows</div>
+          <div class="company-hiring">Actively Hiring</div>
+        </div>
+
+        <div class="company-card">
+          <div class="company-name">Pacific Blasting</div>
+          <div class="company-type">Industrial Trades</div>
+          <div class="company-hiring">Actively Hiring</div>
+        </div>
+
+      </div>
+      <p style="font-size: 0.78rem; color: var(--muted); font-family: 'DM Mono', monospace; margin-top: 1rem;">
+        → Are you a company? <a href="#join" style="color: var(--amber); text-decoration: none;">List your business here</a> to reach qualified candidates.
+      </p>
+    </div>
+  </section>
+
+  <!-- JOIN -->
+  <section class="join-section" id="join">
+    <div class="join-inner">
+      <div class="join-text reveal">
+        <div class="section-label">— Get Started</div>
+        <h2>Pick Your<br>Path.</h2>
+        <p class="section-desc">Whether you're just exploring or actively building your trade career — BuildBC has a place for you. Free to start, always.</p>
+      </div>
+      <div class="join-cards reveal">
+        <div class="join-card">
+          <div class="join-card-title">For <span>Prospects</span> — Free</div>
+          <p>You're exploring trades or actively training. This is your hub.</p>
+          <div class="join-features">
+            <div class="join-feature">Browse all trades and certification paths</div>
+            <div class="join-feature">Save trades and schools to favourites</div>
+            <div class="join-feature">Build your profile and upload certifications</div>
+            <div class="join-feature">Take notes and track your learning</div>
+            <div class="join-feature">Connect with the community</div>
+          </div>
+          <a href="#" class="btn-primary" style="width: 100%; text-align: center; display: block;">Create Free Account</a>
+        </div>
+        <div class="join-card">
+          <div class="join-card-title">For <span>Employers</span></div>
+          <p>Access a searchable directory of certified and apprentice tradespeople in BC who are ready to work.</p>
+          <div class="join-features">
+            <div class="join-feature">Filter by trade, certification level, region</div>
+            <div class="join-feature">View profiles and resumes</div>
+            <div class="join-feature">Contact candidates directly</div>
+            <div class="join-feature">List your company for free</div>
+            <div class="join-feature">Post apprenticeship openings</div>
+          </div>
+          <a href="#" class="btn-secondary" style="width: 100%; text-align: center; display: block;">Employer Access</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">BUILD<span>BC</span></div>
+      <div class="footer-copy">© 2025 BuildBC · Trades Career Hub · Metro Vancouver, BC · Built with purpose.</div>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+
+    // Stagger children of grids
+    document.querySelectorAll('.trades-grid, .schools-list, .testimonials-grid, .companies-grid').forEach(grid => {
+      Array.from(grid.children).forEach((child, i) => {
+        child.style.transitionDelay = `${i * 0.04}s`;
+        child.classList.add('reveal');
+        observer.observe(child);
+      });
+    });
+  </script>
+
+</body>
+</html>
